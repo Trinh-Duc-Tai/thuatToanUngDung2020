@@ -1,0 +1,96 @@
+#include<iostream>
+
+using namespace std;
+
+struct Square
+{
+	int row;
+	int col;
+};
+Square res[910] = {0};
+Square queue[910] = {0};
+int mau[4][2] = { {1,0} , {-1,0} , {0,1} , {0,-1} };
+int n = 0;
+int matrix[35][35] = {0};
+int danhdau[35][35] = {0};
+Square start;
+Square stop;
+int nmin = 0;
+
+bool Check_out(int row, int col)
+{
+	if(row <= 0 || row > n || col <= 0 || col > n) return false;
+	return true;
+}
+
+bool Truyvet(int row, int col,int dem)
+{
+	if(dem == 0)return true;
+	for(int i = 0; i < 4; i++)
+	{
+		int new_row = row + mau[i][0];
+		int new_col = col + mau[i][1];
+		if(Check_out(new_row,new_col) == true && danhdau[new_row][new_col] == danhdau[row][col] - 1)
+		{
+			res[dem].row = new_row;
+			res[dem].col = new_col;
+			if(Truyvet(new_row,new_col, dem - 1) == true)return true;
+		}
+	}
+	return false;
+}
+
+bool BFS(int row, int col)
+{
+	int dau = -1;
+	int cuoi = 0;
+	queue[cuoi].row = row;
+	queue[cuoi].col = col;
+	danhdau[row][col] = 2;
+	while (dau < cuoi)
+	{
+		dau++;
+		Square current = queue[dau];
+		nmin = danhdau[current.row][current.col] - 1;
+		if(current.row == stop.row && current.col == stop.col)return true;
+		for(int i = 0; i < 4; i++)
+		{
+			int new_row = current.row + mau[i][0];
+			int new_col = current.col + mau[i][1];
+			if(Check_out(new_row,new_col) == true && danhdau[new_row][new_col] == false && matrix[new_row][new_col] == 0)
+			{
+				danhdau[new_row][new_col] = danhdau[current.row][current.col] + 1;
+				cuoi++;
+				queue[cuoi].row = new_row;
+				queue[cuoi].col = new_col;
+			}
+		}
+	}
+	return false;
+}
+
+int main()
+{
+	
+	cin >> n >> start.row >> start.col >> stop.row >> stop.col;
+	for( int i = 1; i <= n; i++)
+	{
+		for(int j = 1; j <= n; j++)
+		{
+			cin >> matrix[i][j];
+		}
+	}
+	if(BFS(start.row,start.col) == true)
+	{
+		cout << nmin << endl;
+		res[nmin] = stop;
+		Truyvet(stop.row,stop.col, nmin - 1);
+		for(int i = 1; i <= nmin; i ++)
+		{
+			cout << res[i].row << " " << res[i].col << endl;
+		}
+	}
+	else cout << 0 << endl;
+	
+}
+    
