@@ -3,21 +3,21 @@
 using namespace std;
  
 #define MAX 21
-int minC,n,m,best,mark[MAX],x[MAX],c[MAX][MAX];
+int minC,n,m,best,visited[MAX],x[MAX],c[MAX][MAX];
  
-void  duyet(int i,int sum){
+void  backtrack(int i,int sum){
 	if (i==n+1 && c[x[n]][1]>=0){
 		if (sum+c[x[n]][1] < best)
 			best=sum+c[x[n]][1];
 			return;
 	}
 	for (int j=2;j<=n;j++){
-		if (!mark[j]&&c[x[i-1]][j]>=0){
+		if (!visited[j]&&c[x[i-1]][j]>=0){
 			if (sum+c[x[i -1]][j]+minC*(n-i)<best){
-				mark[j]=1;
+				visited[j]=1;
 				x[i]=j;
-				duyet(i+1,sum+c[x[i-1]][j]);
-				mark[j]=0;
+				backtrack(i+1,sum+c[x[i-1]][j]);
+				visited[j]=0;
 			}
 		}
 	}
@@ -38,10 +38,10 @@ int main(){
 	}
 	x[1]=1;
 	for(int k=0;k<21;k++){
-		mark[k]=0;
+		visited[k]=0;
 	}
 	best=10000000;
-	duyet(2,0);
+	backtrack(2,0);
 	cout<<best;
 	return 0;
 }
