@@ -1,0 +1,43 @@
+// E.REROAD.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+#define MAX 100002
+
+int n;
+int A[MAX], D[MAX];
+
+
+using namespace std;
+
+int getD(int x) {
+    if (x == 1) return 1;
+    return A[x] != A[x - 1];
+}
+
+int main()
+{
+    int sum = 0;
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> A[i];
+    }
+    for (int i = 1; i <= n; i++) {
+        sum += getD(i);
+    }
+    int q,p,c;
+    cin >> q;
+    for (int i = 0; i < q; i++) {
+        cin >> p >> c;
+        sum -= getD(p);
+        if (p != n) {
+            sum -= getD(p + 1);
+        }
+        A[p] = c;
+        sum += getD(p);
+        if (p != n) {
+            sum += getD(p + 1);
+        }
+        cout << sum << endl;
+    }
+}

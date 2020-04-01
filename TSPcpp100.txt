@@ -1,0 +1,47 @@
+#include <iostream>
+ 
+using namespace std;
+ 
+#define MAX 21
+int minC,n,m,best,mark[MAX],x[MAX],c[MAX][MAX];
+ 
+void  duyet(int i,int sum){
+	if (i==n+1 && c[x[n]][1]>=0){
+		if (sum+c[x[n]][1] < best)
+			best=sum+c[x[n]][1];
+			return;
+	}
+	for (int j=2;j<=n;j++){
+		if (!mark[j]&&c[x[i-1]][j]>=0){
+			if (sum+c[x[i -1]][j]+minC*(n-i)<best){
+				mark[j]=1;
+				x[i]=j;
+				duyet(i+1,sum+c[x[i-1]][j]);
+				mark[j]=0;
+			}
+		}
+	}
+}
+ 
+ 
+int main(){
+	minC=10000000;
+	cin>>n>>m;
+	for(int i=0;i<21;i++){
+		for(int j=0;j<21;j++){
+			c[i][j]=-1;
+		}
+	}
+	for(int v=0;v<m;v++){
+		int i,j;	cin>>i>>j; cin>>c[i][j];
+		if(minC>c[i][j]) minC=c[i][j];
+	}
+	x[1]=1;
+	for(int k=0;k<21;k++){
+		mark[k]=0;
+	}
+	best=10000000;
+	duyet(2,0);
+	cout<<best;
+	return 0;
+}
